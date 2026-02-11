@@ -1,0 +1,54 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          # REPLACE BELOW with your actual Docker Hub username!
+          tags: san08k/devops-project:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull and Restart App
+        run: |
+          cd ~/devops-project
+          docker compose pull
+          docker compose up -d --remove-orphans
+          docker image prune -f
+          deploy:
+    needs: build  # Wait for the build to finish
+    runs-on: self-hosted  # <--- This is the MAGIC. It runs on YOUR server!
+    steps:
+      - name: Pull and Restart App
+        run: |
+          # Navigate to your project folder on the server
+          cd ~/devops-project
+          
+          # Pull the latest image we just pushed in the Build step
+          docker compose pull
+          
+          # Restart the containers to use the new image
+          docker compose up -d --remove-orphans
+          
+          # Cleanup old images to save space
+          docker image prune -f
