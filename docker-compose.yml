@@ -4,19 +4,19 @@ services:
     image: san08k/devops-project:latest
     deploy: 
      replicas: 3
-     volumes: 
+    volumes: 
      - .:/code
 
-     nginx: 
+  nginx: 
      image: nginx:alpine
      ports:
      - "8000:80"
 
      volumes: 
-    - ./nginx.conf:/etc/ngnix.conf:ro
-    depends_on:
+     - ./nginx.conf:/etc/ngnix.conf:ro
+     depends_on:
 
-  - web
+      - web
 
    
   redis:
