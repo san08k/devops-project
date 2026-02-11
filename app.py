@@ -1,9 +1,9 @@
 import time
 import redis
+import socket  # <--- NEW IMPORT
 from flask import Flask
 
 app = Flask(__name__)
-# Connect to the Redis container. Hostname 'redis' comes from Docker Compose later.
 cache = redis.Redis(host='redis', port=6379)
 
 def get_hit_count():
@@ -20,7 +20,6 @@ def get_hit_count():
 @app.route('/')
 def hello():
     count = get_hit_count()
-    return 'Hola amigoooo como estats! I have been seen {} times.\n'.format(count)
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    # NEW: Get the container ID
+    host_id = socket.gethostname()
+    return 'Hello from Container: {}! I have been seen {} times.\n'.format(host_id, count)

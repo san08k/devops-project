@@ -2,11 +2,23 @@ version: "3.9"
 services:
   web:
     image: san08k/devops-project:latest
+    deploy: 
+     replicas: 3
+     volumes: 
+     - .:/code
 
-    ports:
-      - "8000:5000"
-    volumes:
-      - .:/code
+     nginx: 
+     image: nginx:alpine
+     ports:
+     - "8000:80"
+
+     volumes: 
+    - ./nginx.conf:/etc/ngnix.conf:ro
+    depends_on:
+
+  - web
+
+   
   redis:
     image: "redis:alpine"
     volumes:
