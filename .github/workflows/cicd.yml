@@ -35,20 +35,4 @@ jobs:
           docker compose pull
           docker compose up -d --remove-orphans
           docker image prune -f
-          deploy:
-    needs: build  # Wait for the build to finish
-    runs-on: self-hosted  # <--- This is the MAGIC. It runs on YOUR server!
-    steps:
-      - name: Pull and Restart App
-        run: |
-          # Navigate to your project folder on the server
-          cd ~/devops-project
           
-          # Pull the latest image we just pushed in the Build step
-          docker compose pull
-          
-          # Restart the containers to use the new image
-          docker compose up -d --remove-orphans
-          
-          # Cleanup old images to save space
-          docker image prune -f
