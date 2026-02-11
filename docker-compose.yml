@@ -10,10 +10,10 @@ services:
   nginx: 
      image: nginx:alpine
      ports:
-     - "8000:80"
+     - "5000:80"
 
      volumes: 
-     - ./nginx.conf:/etc/ngnix.conf:ro
+     - /home/sandeep/devops-project/nginx.conf:/etc/nginx/nginx.conf:ro
      depends_on:
 
       - web
