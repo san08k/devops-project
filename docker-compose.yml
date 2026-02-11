@@ -1,7 +1,8 @@
 version: "3.9"
 services:
   web:
-    build: .
+    image: san08k/devops-project:latest
+
     ports:
       - "8000:5000"
     volumes:
